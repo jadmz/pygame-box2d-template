@@ -1,3 +1,6 @@
+import sys
+import warnings
+
 try:
     import pygame_sdl2
 except ImportError:
@@ -9,9 +12,12 @@ else:
     # pygame_sdl2 is backward-compatible with pygame:
     pygame_sdl2.import_as_pygame()
 
-import pygame, sys
+import pygame
+
 from pygame.locals import (QUIT, KEYDOWN, KEYUP, MOUSEBUTTONDOWN,
                            MOUSEBUTTONUP, MOUSEMOTION, KMOD_LSHIFT)
+
+from Box2D import (b2World)
 
 from renderer import Renderer
 
@@ -26,6 +32,7 @@ class Game:
         self.running = False
         self.clock = pygame.time.Clock()
         self.renderer = Renderer()
+        self.world = b2World()
 
 
     def run(self):
@@ -38,8 +45,10 @@ class Game:
         sys.exit()
     
     def loop(self):
+        time = self.clock.tick(self.FRAMES_PER_SECOND)                
         self.processEvents(pygame_sdl2.event.get())
-        self.clock.tick(self.FRAMES_PER_SECOND)
+        self.world.Step(1.0/self.FRAMES_PER_SECOND, 6, 2)
+
 
     def processEvents(self, events):
         for event in events:
