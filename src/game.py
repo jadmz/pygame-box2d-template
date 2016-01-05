@@ -20,6 +20,7 @@ from pygame.locals import (QUIT, KEYDOWN, KEYUP, MOUSEBUTTONDOWN,
 from Box2D import (b2World)
 
 from renderer import Renderer
+from ground import Ground
 
 class Game:
 
@@ -33,6 +34,10 @@ class Game:
         self.clock = pygame.time.Clock()
         self.renderer = Renderer()
         self.world = b2World()
+
+        self.renderer.setupDebugDraw(self.world)
+
+        self.ground = Ground(self.world)
 
 
     def run(self):
@@ -48,11 +53,20 @@ class Game:
         time = self.clock.tick(self.FRAMES_PER_SECOND)                
         self.processEvents(pygame_sdl2.event.get())
         self.world.Step(1.0/self.FRAMES_PER_SECOND, 6, 2)
-
+        self.update()
+        self.renderer.gameWillRender()
+        self.render()
+        self.world.DrawDebugData()
+        self.renderer.gameDidRender()
 
     def processEvents(self, events):
         for event in events:
             if event.type == QUIT:
                 self.running = False
 
+    def update(self):
+        pass
 
+
+    def render(self):
+        pass

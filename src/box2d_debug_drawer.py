@@ -18,34 +18,36 @@ class Box2dDebugDrawer(b2DrawExtended):
         self.flipY = True
         self.convertVerticies = True
 
+        self.flags = dict(drawShapes=True,
+                          drawJoints=True,
+                          drawAABBs=True,
+                          drawPairs=True,
+                          drawCOMs=True,
+                          convertVertices=True,
+                          )
 
-    def StartDraw(self):
-        pass
-
-    def EndDraw(self):
-        pass
 
     def DrawPoint(self, p, size, color):
-        pass
+        print("Draw point")
     
     def DrawAABB(self, aabb, color):
-        pass
+        print("Draw aabb")
 
     def DrawSegment(self, p1, p2, color):
-        pass
+        print("Draw segment")
 
     def DrawTransform(self, xf):
-        pass
+        print("Draw Transform")
     
     def DrawCircle(self, center, radius, color, drawwidth=1):
-        pass
+        print("Draw Circle")
 
     def DrawSolidCircle(self, center, radius, axis, color):
-        pass
+        print("Draw Solid Circle")
 
     def DrawPolygon(self, verticies, color):
-        pass
+        print("Draw Polygon")
 
     def DrawSolidPolygon(self, verticies, color):
-        pass
+        print("Draw Solid Polygon")
 
