@@ -8,7 +8,7 @@ class Box2dDebugDrawer(b2DrawExtended):
     https://github.com/pybox2d/pybox2d/blob/master/examples/backends/pygame_framework.py
     """
 
-    def __init__(self, renderer, zoom, **kwargs):
+    def __init__(self, renderer, zoom, offset, **kwargs):
         b2DrawExtended.__init__(self, **kwargs)
 
         # The renderer to use
@@ -17,7 +17,7 @@ class Box2dDebugDrawer(b2DrawExtended):
         self.flipX = False
         self.flipY = True
         self.convertVerticies = True
-        self.offset = (0, 0)
+        self.offset = offset
         self.zoom = zoom
 
         self.flags = dict(drawShapes=True,
@@ -73,6 +73,8 @@ class Box2dDebugDrawer(b2DrawExtended):
             self.renderer.drawPolygon(vertices, color.bytes)
 
     def DrawSolidPolygon(self, vertices, color):
+        for vertex in vertices:
+            print(self.to_screen(vertex))
         if not vertices:
             return
         if len(vertices) == 2:

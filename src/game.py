@@ -35,12 +35,12 @@ class Game:
         self.renderer = Renderer()
         self.world = b2World(gravity=(0,-10), doSleep=True)
         self.renderer.setupDebugDraw(self.world)
+        self.gameObjects = []
 
         body = self.world.CreateDynamicBody(position=(10,-10))
         box = body.CreatePolygonFixture(box=(1,1), density=1, friction=0.3)
+        self.player = self.createObject(physics=box)
 
-        self.player = GameObject(game=self, physics=box)
-        
     def run(self):
         self.running = True
 
@@ -66,8 +66,16 @@ class Game:
                 self.running = False
 
     def update(self):
-        pass
+        for obj in self.gameObjects:
+            obj.update()
 
 
     def render(self):
-        pass
+        for obj in self.gameObjects:
+            obj.render(self.renderer)
+
+    def createObject(self, physics=None, renderable=None):
+        gameObject = GameObject(game=self, physics=physics, renderable=renderable)
+        
+        self.gameObjects.append(gameObject)
+        return gameObject
