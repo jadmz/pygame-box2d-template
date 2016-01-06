@@ -7,6 +7,7 @@ class Renderer:
     
     def __init__(self):
         self.surface = pygame.display.set_mode((640, 480))
+        self.zoom = 15
         
     def gameWillRender(self):
         self.surface.fill((255, 255, 255))
@@ -15,7 +16,7 @@ class Renderer:
         pygame.display.flip()
 
     def setupDebugDraw(self, world):
-        self.debugDrawer = Box2dDebugDrawer(self)
+        self.debugDrawer = Box2dDebugDrawer(self, self.zoom)
         world.renderer = self.debugDrawer
 
     def drawLine(self, p1, p2, color):

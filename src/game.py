@@ -17,10 +17,10 @@ import pygame
 from pygame.locals import (QUIT, KEYDOWN, KEYUP, MOUSEBUTTONDOWN,
                            MOUSEBUTTONUP, MOUSEMOTION, KMOD_LSHIFT)
 
-from Box2D import (b2World)
+from Box2D import (b2World, b2PolygonShape)
 
 from renderer import Renderer
-from ground import Ground
+from game_object import GameObject
 
 class Game:
 
@@ -33,13 +33,14 @@ class Game:
         self.running = False
         self.clock = pygame.time.Clock()
         self.renderer = Renderer()
-        self.world = b2World()
-
+        self.world = b2World(gravity=(0,-10), doSleep=True)
         self.renderer.setupDebugDraw(self.world)
 
-        self.ground = Ground(self.world)
+        body = self.world.CreateDynamicBody(position=(10,-10))
+        box = body.CreatePolygonFixture(box=(1,1), density=1, friction=0.3)
 
-
+        self.player = GameObject(game=self, physics=box)
+        
     def run(self):
         self.running = True
 
