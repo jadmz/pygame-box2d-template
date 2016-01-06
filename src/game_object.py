@@ -15,8 +15,9 @@ class GameObject:
 
     def getGamePosition(self):
         position = self.physics.body.position
-        position.y *= -1
-        return (position.x, position.y)
+        x = position.x
+        y = position.y * -1
+        return (x, y)
 
     def setGamePosition(self, x, y):
         self.physics.body.position.x = x

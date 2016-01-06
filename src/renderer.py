@@ -20,24 +20,41 @@ class Renderer:
         self.debugDrawer = Box2dDebugDrawer(self, self.zoom, self.offset)
         world.renderer = self.debugDrawer
 
-    def drawLine(self, p1, p2, color):
+    def drawLine(self, p1, p2, color, convertPoints=True):
+        if convertPoints:
+            p1 = self.toScreenPoint(p1)
+            p2 = self.toScreenPoint(p2)
+
         pygame.draw.aaline(self.surface, color, p1, p2)
 
-    def drawLines(self, points, color):
+    def drawLines(self, points, color, convertPoints=True):
+        if convertPoints:
+            points = map((lambda point: self.toScreenPoint(point)), points)
+                
         pygame.draw.lines(self.surface, color, True, points)
 
-    def drawPolygon(self, vertices, color):
-        print("Polygon: ", vertices, color)
+    def drawPolygon(self, vertices, color, convertPoints=True):
+        if convertPoints:
+            vertices = map((lambda vertex: self.toScreenPoint(vertex)), vertices)
         pygame.draw.polygon(self.surface, color, vertices, 1)
 
-    def drawFilledPolygon(self, vertices, color):
-        print("Filled Polygon:", vertices, color)
+    def drawFilledPolygon(self, vertices, color, convertPoints=True):
+        if convertPoints:
+            vertices = map((lambda vertex: self.toScreenPoint(vertex)), vertices)
         pygame.draw.polygon(self.surface, color, vertices)
 
-    def drawCircle(self, center, radius, color):
+    def drawCircle(self, center, radius, color, convertPoints=True):
+        if convertPoints:
+            center = self.toScreenPoint(center)
+            radius = radius * self.zoom
+        radius = int(radius)
         pygame.draw.circle(self.surface, color,
                            center, radius, 1)
-    def drawFilledCircle(self, center, radius, color):
+    def drawFilledCircle(self, center, radius, color, convertPoints=True):
+        if convertPoints:
+            center = self.toScreenPoint(center)
+            radius = radius * self.zoom
+        radius = int(radius)
         pygame.draw.circle(self.surface, color,
                            center, radius, 0)
 
@@ -48,9 +65,5 @@ class Renderer:
         """
 
         x=(point.x * self.zoom)-self.offset.x
-        if self.flipX:
-            x = self.screenSize.x - x
-            y=(point.y * self.zoom)-self.offset.y
-            if self.flipY:
-                y = self.screenSize.y-y
-                return (x, y)
+        y=(point.y * self.zoom)-self.offset.y
+        return (x, y)

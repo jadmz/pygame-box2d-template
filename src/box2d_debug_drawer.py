@@ -33,15 +33,14 @@ class Box2dDebugDrawer(b2DrawExtended):
         self.DrawCircle(p, size, color)
     
     def DrawAABB(self, aabb, color):
-        print("Draw aabb")
         points = [(aabb.lowerBound.x, aabb.lowerBound.y),
                   (aabb.upperBound.x, aabb.lowerBound.y),
                   (aabb.upperBound.x, aabb.upperBound.y),
                   (aabb.lowerBound.x, aabb.upperBound.y)]
 
-        self.renderer.drawLines(points, color)
+        self.renderer.drawLines(points, color, False)
     def DrawSegment(self, p1, p2, color):
-        self.renderer.drawLine(p1, p2, color.bytes)
+        self.renderer.drawLine(p1, p2, color.bytes, False)
 
     def DrawTransform(self, xf):
         p1 = xf.position
@@ -49,20 +48,19 @@ class Box2dDebugDrawer(b2DrawExtended):
         p3 = self.to_screen(p1 + 1 * xf.R.y_axis)
         p1 = self.to_screen(p1)
 
-        self.renderer.drawLine(p1, p2, (255, 0, 0))
-        self.renderer.drawLine(p1, p3, (0, 255, 0))
+        self.renderer.drawLine(p1, p2, (255, 0, 0), False)
+        self.renderer.drawLine(p1, p3, (0, 255, 0), False)
     
     def DrawCircle(self, center, radius, color, drawwidth=1):
-        radius = int(radius)
-        self.renderer.drawCircle(center, radius, color.bytes)
+        radius *= self.zoom
+        self.renderer.drawCircle(center, radius, color.bytes, False)
 
     def DrawSolidCircle(self, center, radius, axis, color):
-        radius = int(radius)
-        self.renderer.drawFilledCircle(center, radius, color)
+        self.renderer.drawFilledCircle(center, radius, color, False)
         self.renderer.drawLine(center,
                                (center[0] - radius * axis[0],
                                 center[1] + radius * axis[1]),
-                                (255, 0, 0))
+                                (255, 0, 0), False)
 
     def DrawPolygon(self, vertices, color):
         if not vertices:
@@ -70,15 +68,13 @@ class Box2dDebugDrawer(b2DrawExtended):
         if len(vertices) == 2:
             self.DrawSegment(vertices[0], vertices[1], color)
         else:
-            self.renderer.drawPolygon(vertices, color.bytes)
+            self.renderer.drawPolygon(vertices, color.bytes, False)
 
     def DrawSolidPolygon(self, vertices, color):
-        for vertex in vertices:
-            print(self.to_screen(vertex))
         if not vertices:
             return
         if len(vertices) == 2:
             self.DrawSegment(vertices[0], vertices[1], color)
         else:
-            self.renderer.drawFilledPolygon(vertices, color.bytes)
+            self.renderer.drawFilledPolygon(vertices, color.bytes, False)
 
